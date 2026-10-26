@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#611232" />
+  <meta name="description" content="Explorador interactivo de IDH, IDH ajustado por desigualdad e índice de desarrollo humano ampliado. Rankings, mapas y evolución histórica." />
+  <title>Observatorio de Desarrollo Humano | Comparación internacional</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <div class="site-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><span class="brand-rule"></span><div><span class="brand-small">OBSERVATORIO</span><strong>Desarrollo<br>Humano</strong><span class="brand-caption">Análisis comparativo internacional</span></div></div>
+      <div class="side-label">SECCIONES</div>
+      <nav aria-label="Secciones del tablero" id="nav">
+        <button class="nav-item active" data-tab="panorama">01 <span>Panorama general</span></button>
+        <button class="nav-item" data-tab="mapa">02 <span>Mapas interactivos</span></button>
+        <button class="nav-item" data-tab="clasificacion">03 <span>Clasificación</span></button>
+        <button class="nav-item" data-tab="comparador">04 <span>Comparador</span></button>
+        <button class="nav-item" data-tab="evolucion">05 <span>Evolución histórica</span></button>
+        <button class="nav-item" data-tab="seleccion">06 <span>Selección de 30 casos</span></button>
+        <button class="nav-item" data-tab="fuentes">07 <span>Fuentes y método</span></button>
+      </nav>
+      <div class="side-bottom">Inspirado en la paleta de la Guía de Identidad Gráfica del Gobierno de México 2024–2030.<br><br>Visualización analítica no identificada como portal oficial.</div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div class="top-title"><button id="menuBtn" class="menu" aria-label="Mostrar menú">☰</button><div class="eyebrow">INDICADORES SOCIALES · CONSULTA INTERACTIVA</div><h1>Desarrollo humano en perspectiva internacional</h1><p>Datos comparables por país y región, con México como referencia.</p></div>
+        <button class="btn-quiet" id="shareBtn" title="Copiar enlace con filtros actuales">Compartir vista</button>
+      </header>
+      <div id="error" class="notice error" role="alert" hidden></div>
+      <div class="filters" id="filterPanel">
+        <label>Indicador <select id="indicator"><option value="IDH">IDH · Desarrollo humano</option><option value="IDH-D">IDH-D · Ajustado por desigualdad</option><option value="AHDI">AHDI · Desarrollo ampliado</option></select></label>
+        <label>Año <select id="year"></select></label>
+        <label>Región <select id="region"><option value="Todas">Todas las regiones</option><option>África</option><option>Asia</option><option>Europa</option><option>América del Norte</option><option>América del Sur</option><option>Oceanía</option></select></label>
+        <label>Orden <select id="order"><option value="desc">De mayor a menor</option><option value="asc">De menor a mayor</option></select></label>
+      </div>
+      <div id="loading" class="loading">Cargando las tres bases de datos…</div>
+      <div id="dashboard" hidden>
+        <section class="tab active" id="tab-panorama">
+          <div class="section-title"><div><div class="eyebrow">PANORAMA / 01</div><h2>Panorama general</h2><p>Resumen de países con datos y su relación con el valor de México para el indicador y año elegidos.</p></div></div>
+          <div class="kpi-grid"><div class="kpi"><span>Valor de México</span><strong id="kpiMexico">—</strong><small id="kpiMexicoNote"></small></div><div class="kpi"><span>Países con datos</span><strong id="kpiTotal">—</strong><small>En el año seleccionado</small></div><div class="kpi"><span>Debajo de México</span><strong id="kpiLower">—</strong><small>Comparación estricta, sin empates</small></div><div class="kpi"><span>Promedio de países</span><strong id="kpiAverage">—</strong><small>Media simple, no ponderada</small></div></div>
+          <div class="two-columns"><article class="panel"><div class="panel-head"><h3>Distribución por región</h3><p>Promedio de países con información disponible</p></div><div id="chartRegion" class="chart"></div></article><article class="panel"><div class="panel-head"><h3>Países con valores próximos a México</h3><p>Los 10 inmediatamente inferiores, sin filtrar por región</p></div><div id="chartNear" class="chart"></div></article></div>
+          <div class="notice"><strong>Lectura correcta:</strong> El IDH y el IDH-D llegan hasta 2023; el AHDI llega hasta 2020. No deben compararse como si midieran dimensiones idénticas.</div>
+        </section>
+        <section class="tab" id="tab-mapa">
+          <div class="section-title"><div><div class="eyebrow">TERRITORIO / 02</div><h2>Mapas interactivos</h2><p>Pasa el cursor sobre un país o selecciónalo para consultar sus datos.</p></div></div>
+          <div class="tools"><label>Visualizar <select id="mapMode"><option value="value">Valor del índice</option><option value="gap">Diferencia respecto de México</option><option value="selection">30 países inmediatamente inferiores a México</option><option value="loss">Pérdida porcentual por desigualdad (IDH e IDH-D)</option></select></label><div class="legend-note" id="mapNote"></div></div>
+          <article class="panel"><div id="mapChart" class="mapchart"></div></article>
+          <div id="countryDetail" class="notice">Selecciona un país en el mapa para ver su ficha comparativa.</div>
+        </section>
+        <section class="tab" id="tab-clasificacion">
+          <div class="section-title"><div><div class="eyebrow">PAÍSES / 03</div><h2>Clasificación y exploración</h2><p>Consulta todos los registros disponibles, ordenados por valor; filtra y exporta la selección.</p></div></div>
+          <div class="tools"><label>Buscar país <input type="search" id="searchCountry" placeholder="Nombre o código de país" /></label><label>Situación frente a México <select id="classFilter"><option value="all">Todos los países</option><option value="lower">Solo debajo de México</option><option value="above">Solo arriba de México</option></select></label><button class="btn-solid" id="exportRanking">Descargar CSV</button></div>
+          <article class="panel" style="padding:0"><div class="table-head"><span id="rankingCount">— registros</span><small>Los valores faltantes nunca se sustituyen por cero.</small></div><div class="table-scroll"><table><thead><tr><th>Posición</th><th>País</th><th>Región</th><th>Índice</th><th>Diferencia con México</th></tr></thead><tbody id="rankingBody"></tbody></table></div><div class="pager"><button id="prevPage" class="btn-quiet">Anterior</button><span id="pageLabel"></span><button id="nextPage" class="btn-quiet">Siguiente</button></div></article>
+        </section>
+        <section class="tab" id="tab-comparador">
+          <div class="section-title"><div><div class="eyebrow">COMPARACIÓN / 04</div><h2>Comparador de países</h2><p>Compara los valores para un mismo indicador y año, así como las pérdidas asociadas a la desigualdad.</p></div></div>
+          <div class="tools"><label>Seleccionar país <select id="countryAdd"></select></label><button id="addCountry" class="btn-solid">Agregar a comparación</button><button id="clearCountries" class="btn-quiet">Restablecer</button></div><div id="selectedCountries" class="chipbar"></div>
+          <article class="panel"><div class="panel-head"><h3>Comparación directa</h3><p id="compareNote"></p></div><div id="compareChart" class="chart tall"></div></article>
+          <article class="panel"><div class="panel-head"><h3>Desigualdad y desarrollo humano</h3><p>Solo países y años con valores simultáneos de IDH e IDH-D</p></div><div class="table-scroll"><table><thead><tr><th>País</th><th>IDH</th><th>IDH-D</th><th>Pérdida relativa</th></tr></thead><tbody id="inequalityBody"></tbody></table></div></article>
+        </section>
+        <section class="tab" id="tab-evolucion">
+          <div class="section-title"><div><div class="eyebrow">TIEMPO / 05</div><h2>Evolución histórica</h2><p>Series comparables dentro del mismo indicador. El periodo disponible varía por fuente y por país.</p></div></div>
+          <article class="panel"><div class="panel-head"><h3 id="historyTitle">Evolución del indicador</h3><p id="historyNote"></p></div><div id="historyChart" class="chart tall"></div></article>
+        </section>
+        <section class="tab" id="tab-seleccion">
+          <div class="section-title"><div><div class="eyebrow">MÉTODO / 06</div><h2>Selección de 30 países</h2><p>Los 30 países con índice inmediatamente inferior al de México, de mayor a menor. La selección es global y no cambia al filtrar regiones.</p></div></div>
+          <div class="kpi-grid selection-kpis"><div class="kpi"><span>Casos seleccionados</span><strong id="sel30">—</strong><small>Máximo 30 países</small></div><div class="kpi"><span>Países inferiores a México</span><strong id="selTotal">—</strong><small>Universo elegible</small></div><div class="kpi"><span>Criterio de referencia</span><strong id="selMexico">—</strong><small>Valor de México en el mismo año</small></div></div>
+          <div class="tools"><label>Buscar entre seleccionados <input id="searchSelection" type="search" placeholder="Escribe un país" /></label><button class="btn-solid" id="exportSelection">Descargar selección CSV</button></div>
+          <article class="panel" style="padding:0"><div class="table-scroll"><table><thead><tr><th>Orden</th><th>País</th><th>Continente</th><th>Índice</th><th>Diferencia con México</th></tr></thead><tbody id="selectionBody"></tbody></table></div></article>
+          <article class="panel"><div class="panel-head"><h3>Contraste de criterios: IDH frente a IDH-D (2023)</h3><p>La intersección de los primeros 30 países de cada indicador</p></div><div id="selectionOverlap" class="notice"></div><div id="overlapChart" class="chart"></div></article>
+        </section>
+        <section class="tab" id="tab-fuentes">
+          <div class="section-title"><div><div class="eyebrow">TRANSPARENCIA / 07</div><h2>Fuentes, definiciones y metodología</h2><p>Se presentan las definiciones originales, los años disponibles y las reglas de filtrado del tablero.</p></div></div>
+          <article class="panel source"><h3>Índice de Desarrollo Humano (IDH)</h3><p>Medida sintética de los logros en tres dimensiones del desarrollo humano: una vida larga y saludable, acceso a la educación y un nivel de vida digno. Los valores más altos indican mayor desarrollo humano.</p><p><strong>Cobertura de esta base:</strong> 1990–2023.</p><p><strong>Fuente:</strong> UNDP, Human Development Report (2025) – con procesamiento menor de Our World in Data. “Human Development Index – UNDP” [dataset]. Consultado el 26 de octubre de 2026. <a href="https://archive.ourworldindata.org/20260812-103058/grapher/human-development-index.html" target="_blank" rel="noopener">Base archivada (12 de agosto de 2026)</a>.</p></article>
+          <article class="panel source"><h3>Índice de Desarrollo Humano ajustado por Desigualdad (IDH-D)</h3><p>Medida de desarrollo humano en salud, educación e ingresos que incorpora las desigualdades en la distribución de estas dimensiones. Un valor más alto expresa mayor desarrollo humano una vez descontada la desigualdad.</p><p><strong>Cobertura de esta base:</strong> 2010–2023.</p><p><strong>Fuente:</strong> UNDP, Human Development Report (2025) – con procesamiento menor de Our World in Data. “Inequality-adjusted Human Development Index – UNDP” [dataset]. Consultado el 26 de octubre de 2026. <a href="https://archive.ourworldindata.org/20260826-181749/grapher/inequality-adjusted-human-development-index.html" target="_blank" rel="noopener">Base archivada (26 de agosto de 2026)</a>.</p></article>
+          <article class="panel source"><h3>Índice de Desarrollo Humano Ampliado (AHDI)</h3><p>Medida sintética de cuatro dimensiones del desarrollo humano: una vida larga y saludable, acceso al conocimiento, libertad y un nivel de vida digno.</p><p><strong>Cobertura de esta base:</strong> 1870–2020, con observaciones históricas de frecuencia variable.</p><p><strong>Fuente:</strong> Leandro Prados de la Escosura (2022), <em>Human Development and the Path to Freedom: 1870 to the Present</em>, Cambridge University Press. <a href="https://doi.org/10.1017/9781108769655" target="_blank" rel="noopener">DOI: 10.1017/9781108769655</a>.</p></article>
+          <article class="panel source"><h3>Criterios analíticos</h3><p>Se utilizan únicamente registros con códigos ISO de tres letras, región informada y valores numéricos válidos. Se excluyen agregados regionales o mundiales. Las regiones corresponden a la clasificación «World region according to OWID» de las bases originales, que incluye Centroamérica y el Caribe en América del Norte.</p><p>Para calcular la selección de 30 casos se utiliza el valor de México en el <strong>mismo indicador y año</strong> y se eligen los 30 países con índices estrictamente inferiores más próximos a dicho valor. Los empates se ordenan alfabéticamente. La selección no es aleatoria ni implica similitud institucional en materia de salud.</p><p>La pérdida porcentual por desigualdad se calcula como <strong>100 × (IDH − IDH-D) / IDH</strong>, solo para países y años con ambos valores disponibles. No debe confundirse la diferencia numérica entre IDH y AHDI con una pérdida causada por la desigualdad, ya que sus dimensiones son distintas.</p><p>Los promedios regionales del tablero son medias aritméticas simples de los países con datos; no se ponderan por población. Se muestran los años realmente disponibles y no se interpolan los faltantes.</p><p><strong>Diseño:</strong> paleta institucional de la Guía de Identidad Gráfica del Gobierno de México 2024–2030, página 17. El uso de los colores no supone aval ni carácter oficial del sitio.</p></article>
+        </section>
+      </div>
+      <footer>Fuentes: PNUD / Our World in Data; Prados de la Escosura (2022) · Consulta interactiva de datos históricos · Sin actualización automática de fuentes</footer>
+    </main>
+  </div>
+</body>
+</html>
