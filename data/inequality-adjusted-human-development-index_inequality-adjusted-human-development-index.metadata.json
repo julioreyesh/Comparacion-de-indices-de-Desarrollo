@@ -1,0 +1,55 @@
+{
+  "chart": {
+    "title": "Inequality-adjusted Human Development Index",
+    "subtitle": "The Inequality-adjusted Human Development Index (IHDI) is a summary measure of key dimensions of human development: a long and healthy life, a good education, and a decent standard of living, adjusted for inequalities in these dimensions. Higher values indicate higher and more equal human development.",
+    "citation": "UNDP, Human Development Report (2025)",
+    "originalChartUrl": "https://ourworldindata.org/grapher/inequality-adjusted-human-development-index?v=1&csvType=full&useColumnShortNames=false",
+    "selection": [
+      "United Kingdom",
+      "United States",
+      "South Korea",
+      "China",
+      "Chile",
+      "Brazil",
+      "Niger",
+      "Nigeria",
+      "Democratic Republic of Congo",
+      "India"
+    ]
+  },
+  "columns": {
+    "Inequality-adjusted Human Development Index": {
+      "titleShort": "Inequality-adjusted Human Development Index",
+      "titleLong": "Inequality-adjusted Human Development Index",
+      "descriptionShort": "The Inequality-adjusted Human Development Index (IHDI) is a summary measure of key dimensions of human development: a long and healthy life, a good education, and a decent standard of living, adjusted for inequalities in these dimensions. Higher values indicate higher and more equal human development.",
+      "descriptionKey": "- The Inequality-adjusted Human Development Index (IHDI) adjusts the Human Development Index (HDI) for inequality in the distribution of each dimension across the population.\n- It is based on a distribution-sensitive class of composite indices proposed by Foster, Lopez-Calva and Szekely (2005), which draws on the Atkinson (1970) family of inequality measures. It is computed as a geometric mean of inequality-adjusted dimensional indices.\n- The IHDI accounts for inequalities in HDI dimensions by \"discounting\" each dimension's average value according to its level of inequality. The IHDI value equals the HDI value when there is no inequality across people but falls below the HDI value as inequality rises. In this sense the IHDI measures the level of human development when inequality is accounted for.\n- Data is originally sourced from UNDESA complete life tables (health), harmonized household-survey micro-datasets (education) and the UNU-WIDER WIID (income).",
+      "descriptionProcessing": "We calculated averages over continents and income groups by taking the population-weighted average of the countries in each group. If less than 80% of countries in an area report data for a given year, we do not calculate the average for that area.",
+      "unit": "",
+      "timespan": "2010-2023",
+      "type": "Numeric",
+      "owidVariableId": 1032421,
+      "shortName": "ihdi",
+      "lastUpdated": "2025-05-07",
+      "nextUpdate": "2026-11-26",
+      "citationShort": "UNDP, Human Development Report (2025) – with minor processing by Our World in Data",
+      "citationLong": "UNDP, Human Development Report (2025) – with minor processing by Our World in Data. “Inequality-adjusted Human Development Index – UNDP” [dataset]. UNDP, Human Development Report, “Human Development Report” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/1032421.metadata.json"
+    },
+    "World region according to OWID": {
+      "titleShort": "World region according to OWID",
+      "titleLong": "World region according to OWID",
+      "descriptionShort": "Regions defined by Our World in Data, which are used in OWID charts and maps.",
+      "unit": "",
+      "timespan": "2023-2023",
+      "type": "Continent",
+      "owidVariableId": 900801,
+      "shortName": "owid_region",
+      "lastUpdated": "2023-01-01",
+      "citationShort": "Our World in Data",
+      "citationLong": "Our World in Data. “World region according to OWID” [dataset]. Our World in Data, “Regions” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/900801.metadata.json"
+    }
+  },
+  "dateDownloaded": "2026-10-26",
+  "activeFilters": {}
+}

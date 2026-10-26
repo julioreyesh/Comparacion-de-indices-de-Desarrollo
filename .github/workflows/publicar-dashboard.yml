@@ -1,0 +1,63 @@
+name: Comprobar y publicar dashboard Shiny
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'app.R'
+      - 'data/**'
+      - 'www/**'
+      - 'scripts/**'
+      - '.github/workflows/publicar-dashboard.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: despliegue-shiny-main
+  cancel-in-progress: true
+
+jobs:
+  comprobar-y-publicar:
+    runs-on: ubuntu-latest
+    env:
+      SHINYAPPS_ACCOUNT: ${{ secrets.SHINYAPPS_ACCOUNT }}
+      SHINYAPPS_TOKEN: ${{ secrets.SHINYAPPS_TOKEN }}
+      SHINYAPPS_SECRET: ${{ secrets.SHINYAPPS_SECRET }}
+      SHINYAPPS_VISIBILITY: ${{ vars.SHINYAPPS_VISIBILITY }}
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+
+      - name: Configurar R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: 'release'
+          use-public-rspm: true
+
+      - name: Instalar dependencias de R
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::shiny
+            any::bslib
+            any::dplyr
+            any::plotly
+            any::DT
+            any::rsconnect
+          cache: true
+
+      - name: Verificar datos originales
+        run: python3 scripts/comprobar_datos.py
+
+      - name: Comprobar sintaxis de la aplicación
+        run: Rscript -e "invisible(parse(file = 'app.R')); cat('Sintaxis de app.R válida\n')"
+
+      - name: Publicar en shinyapps.io
+        if: ${{ env.SHINYAPPS_ACCOUNT != '' && env.SHINYAPPS_TOKEN != '' && env.SHINYAPPS_SECRET != '' }}
+        run: Rscript scripts/publicar_github_actions.R
+
+      - name: Avisar cuando faltan credenciales
+        if: ${{ env.SHINYAPPS_ACCOUNT == '' || env.SHINYAPPS_TOKEN == '' || env.SHINYAPPS_SECRET == '' }}
+        run: echo "Validación terminada. Para publicar, configura SHINYAPPS_ACCOUNT, SHINYAPPS_TOKEN y SHINYAPPS_SECRET en Settings > Secrets and variables > Actions, y vuelve a ejecutar el workflow desde Actions."

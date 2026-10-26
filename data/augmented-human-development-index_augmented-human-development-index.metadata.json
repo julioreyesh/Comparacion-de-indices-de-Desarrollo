@@ -1,0 +1,62 @@
+{
+  "chart": {
+    "title": "Augmented Human Development Index",
+    "subtitle": "The Augmented Human Development Index (AHDI) is a summary measure of achievement in four key dimensions of human development: a long and healthy life, being knowledgeable, being free and having a decent standard of living.",
+    "citation": "Leandro Prados de la Escosura (2022)",
+    "originalChartUrl": "https://ourworldindata.org/grapher/augmented-human-development-index?v=1&csvType=full&useColumnShortNames=false",
+    "selection": [
+      "Sub Saharan Africa (AHDI)",
+      "Western offshoots (AHDI)",
+      "Western Europe (AHDI)",
+      "Eastern Europe (AHDI)",
+      "Latin America (AHDI)",
+      "North Africa (AHDI)",
+      "Middle East (AHDI)",
+      "South Asia (AHDI)",
+      "East Asia (AHDI)"
+    ]
+  },
+  "columns": {
+    "Augmented Human Development Index (AHDI)": {
+      "titleShort": "Augmented Human Development Index (AHDI)",
+      "titleLong": "Augmented Human Development Index (AHDI)",
+      "descriptionShort": "The AHDI seeks to give a historical perspective on human development, in four dimensions: healthy life, knowledge, a decent standard of living, and civil and political freedom.\n",
+      "descriptionKey": "- Each of the dimensions of the AHDI is measured with four indicators: a long and healthy life is measured by _life expectancy at birth_, knowledge is measured by _mean_ _years of schooling_; a decent standard of living is measured by _GDP per capita_, logarithmized to reflect that incomes become less important as they increase; and civil and political freedom is measured by [_Varieties of Democracy's Liberal democracy index_](https://ourworldindata.org/vdem-electoral-democracy-data).\n- The index is then calculated by normalizing the indicators. First, the indicators are brought onto the same scale, ranging from 0 to 1. This is done by setting minimum and maximum values for each indicator, and a country at or below the minimum value receiving a score of 0, and a country at or above the maximum value receiving a score of 1.\n- The minimum and maximum values for each indicator are defined as follows: _Life expectancy at birth_ ranges between 20 and 85 years; _mean years of schooling_, between 0 and 15 years; _GDP per capita_ between 100 and 47,000 international-$ at 1990 prices; and V-Dem's Liberal democracy index is already standardized between 0 and 1 (most democratic).\n- The AHDI is then estimated as the geometric mean of these indices, or _AHDI = (Health index * Education index * Income index * Freedom index)^(1/4)_.",
+      "shortUnit": "",
+      "unit": "",
+      "timespan": "1870-2020",
+      "type": "Numeric",
+      "owidVariableId": 814486,
+      "shortName": "ahdi",
+      "lastUpdated": "2023-09-08",
+      "nextUpdate": "2026-11-26",
+      "citationShort": "Leandro Prados de la Escosura (2022) – with minor processing by Our World in Data",
+      "citationLong": "Leandro Prados de la Escosura (2022) – with minor processing by Our World in Data. “Augmented Human Development Index (AHDI)” [dataset]. Leandro Prados de la Escosura, “Augmented Human Development Index (AHDI) – Country data”; Leandro Prados de la Escosura, “Augmented Human Development Index (AHDI) – Regional data” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/814486.metadata.json"
+    },
+    "World region according to OWID": {
+      "titleShort": "World region according to OWID",
+      "titleLong": "World region according to OWID",
+      "descriptionShort": "Regions defined by Our World in Data, which are used in OWID charts and maps.",
+      "unit": "",
+      "timespan": "2023-2023",
+      "type": "Continent",
+      "owidVariableId": 900801,
+      "shortName": "owid_region",
+      "lastUpdated": "2023-01-01",
+      "citationShort": "Our World in Data",
+      "citationLong": "Our World in Data. “World region according to OWID” [dataset]. Our World in Data, “Regions” [original data].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/900801.metadata.json"
+    },
+    "814486-annotations": {
+      "titleShort": "814486-annotations",
+      "titleLong": "814486-annotations",
+      "type": "SeriesAnnotation",
+      "citationShort": " – processed by Our World in Data",
+      "citationLong": " – processed by Our World in Data. “814486-annotations” [dataset].",
+      "fullMetadata": "https://api.ourworldindata.org/v1/indicators/undefined.metadata.json"
+    }
+  },
+  "dateDownloaded": "2026-10-26",
+  "activeFilters": {}
+}
